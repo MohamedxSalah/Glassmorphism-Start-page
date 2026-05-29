@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Glassmorphism Start Page",
+  "version": "2.0",
+  "description": "A beautiful minimalist new tab page with weather and shortcuts.",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "permissions": [
+    "storage",
+    "geolocation"
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "glassmorphism-startpage@yourdomain.local",
+      "data_collection_permissions": {
+        "required": [
+          "locationInfo"
+        ]
+      }
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
