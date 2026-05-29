@@ -1,0 +1,425 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #111111; /* Dark placeholder base prevents asset load flashes */
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    overflow: hidden;
+    transition: background-image 0.3s ease-in-out;
+}
+
+/* Glassmorphism Cards Base */
+.glass-container, .glass-card {
+    background: rgba(255, 255, 255, 0.06);
+    /* Uses dynamic variable controlled by JavaScript blur slider */
+    backdrop-filter: blur(var(--blur-amount, 25px));
+    -webkit-backdrop-filter: blur(var(--blur-amount, 25px));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.25);
+    transition: backdrop-filter 0.1s ease-out, -webkit-backdrop-filter 0.1s ease-out;
+}
+
+.glass-container {
+    padding: 3rem 2.5rem;
+    border-radius: 28px;
+    width: 90%;
+    max-width: 640px; /* Fits 6 shortcut items perfectly */
+    text-align: center;
+}
+
+#clock {
+    font-size: 4.5rem;
+    font-weight: 700;
+    letter-spacing: -2px;
+    margin-bottom: 0.25rem;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#greeting {
+    font-size: 1.25rem;
+    font-weight: 400;
+    opacity: 0.85;
+    margin-bottom: 0.5rem;
+}
+
+/* Weather Container Widget */
+#weather-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    opacity: 0.85;
+    margin-bottom: 2rem;
+}
+
+#weather-icon {
+    font-size: 1.25rem;
+}
+
+#weather-temp {
+    font-weight: 600;
+}
+
+/* Icons and Utility Buttons */
+.icon-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.icon-btn:hover {
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+#settings-btn {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    z-index: 10;
+}
+
+#settings-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: rotate(30deg);
+}
+
+/* Search Bar Container */
+.search-form {
+    display: flex;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    padding: 6px 6px 6px 20px;
+    margin-bottom: 2.5rem;
+    transition: all 0.3s ease;
+    align-items: center;
+}
+
+.search-form:focus-within {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.search-form input {
+    background: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    flex-grow: 1;
+    color: #ffffff;
+    font-size: 1rem;
+    height: 40px;
+}
+
+.search-form input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.search-form button {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    outline: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: #ffffff;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+/* Shortcuts Section */
+.shortcuts {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 shortcuts per row */
+    gap: 1rem;
+    justify-content: center;
+}
+
+.shortcut-item {
+    text-decoration: none;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    transition: transform 0.2s ease;
+}
+
+.shortcut-item:hover {
+    transform: translateY(-4px);
+}
+
+.icon-wrapper {
+    width: 52px;
+    height: 52px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    padding: 12px;
+}
+
+.icon-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
+}
+
+.shortcut-item:hover .icon-wrapper {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+.shortcut-item span {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    max-width: 70px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Settings Modal Elements */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 100;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    width: 90%;
+    max-width: 440px;
+    padding: 2rem;
+    border-radius: 20px;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.modal-header h3 {
+    font-weight: 500;
+    font-size: 1.3rem;
+}
+
+#close-modal {
+    font-size: 1.75rem;
+}
+
+.setting-section {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 0.75rem;
+}
+
+.setting-section h4 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.7;
+}
+
+.setting-label {
+    font-size: 0.85rem;
+    opacity: 0.8;
+    margin-bottom: -0.25rem;
+}
+
+/* Dropdown selections */
+select {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+    outline: none;
+    font-size: 0.95rem;
+    cursor: pointer;
+    width: 100%;
+}
+
+select option {
+    background: #222222;
+    color: #ffffff;
+}
+
+/* Inputs & Form Groups */
+#add-shortcut-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+input[type="text"], input[type="url"] {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: #ffffff;
+    outline: none;
+    width: 100%;
+}
+
+input:focus {
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+.bg-input-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+.bg-input-group-vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.file-label {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    padding: 12px;
+    text-align: center;
+    border-radius: 10px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.file-label:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.primary-btn {
+    background: rgba(255, 255, 255, 0.85);
+    color: #111111;
+    border: none;
+    padding: 11px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.primary-btn:hover {
+    background: #ffffff;
+}
+
+.small-btn {
+    padding: 0 15px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.modal-divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 1.5rem 0;
+}
+
+/* Management Lists */
+.manage-list {
+    max-height: 140px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.manage-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.delete-btn {
+    color: #ff6b6b;
+    font-size: 0.8rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    text-decoration: underline;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Drag and Drop Interactive States */
+.shortcut-item.drag-over {
+    transform: scale(1.08);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+}
