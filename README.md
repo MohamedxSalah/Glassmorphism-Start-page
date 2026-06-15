@@ -5,5 +5,7 @@ A beautiful minimalist new tab page with weather and shortcuts.
 <img width="1902" height="923" alt="image" src="https://github.com/user-attachments/assets/54e9507d-24d6-4a20-b6bc-ab797d604c49" />
 
 # Downlaod
+
 Firefox : https://addons.mozilla.org/en-US/firefox/addon/glassmorphism-start-page/
+
 Chrome : Download from uploaded files and load unpacked 
