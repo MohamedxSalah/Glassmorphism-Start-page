@@ -1,0 +1,1514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Tab</title>
+    <link rel="icon" id="tab-icon-link" href="icon48.png">
+    <link rel="stylesheet" id="main-stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Texture Overlay Element (sits above bg, below content) -->
+    <div id="texture-overlay-el"></div>
+
+    <!-- Side Buttons Container (draggable) -->
+    <div id="side-buttons-container">
+        <button id="settings-btn" class="icon-btn side-btn" data-btn-id="settings" title="Settings">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </button>
+        <button id="history-btn" class="icon-btn side-btn" data-btn-id="history" title="History">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </button>
+        <button id="bookmarks-btn" class="icon-btn side-btn" data-btn-id="bookmarks" title="Bookmarks">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+        </button>
+        <button id="calendar-btn" class="icon-btn side-btn" data-btn-id="calendar" title="Calendar">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+        </button>
+        <button id="notes-btn" class="icon-btn side-btn" data-btn-id="notes" title="Notes">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        </button>
+        <button id="timer-btn" class="icon-btn side-btn" data-btn-id="timer" title="Timer & Alarm">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"></circle><polyline points="12 9 12 13 14.5 15.5"></polyline><path d="M5 3L3 5M19 3l2 2"></path><line x1="12" y1="5" x2="12" y2="1"></line></svg>
+        </button>
+    </div>
+
+    <div class="glass-container">
+        <!-- Digital clock (default) -->
+        <h1 id="clock" class="digital-clock">00:00</h1>
+
+        <!-- Analog clock (shown when analog mode enabled) -->
+        <div id="analog-clock-wrap" class="analog-clock-wrap hidden">
+            <canvas id="analog-clock-canvas"></canvas>
+        </div>
+
+        <!-- Date display -->
+        <div id="date-display" class="date-display hidden"></div>
+
+        <h2 id="greeting">Hello</h2>
+        
+        <div id="weather-container">
+            <span id="weather-icon"></span>
+            <span id="weather-temp">--°C</span>
+            <span id="weather-desc">Loading weather...</span>
+        </div>
+
+        <div id="quote-container" class="quote-container hidden">
+            <span id="quote-text"></span>
+            <span id="quote-author"></span>
+        </div>
+        
+        <form id="search-form" class="search-form" action="https://www.google.com/search" method="GET">
+            <input type="text" name="q" placeholder="Search the web..." autofocus autocomplete="off">
+            <button type="submit">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+        </form>
+
+        <div id="shortcut-groups-bar" class="shortcut-groups-bar hidden">
+            <div id="shortcut-groups-tabs" class="shortcut-groups-tabs"></div>
+            <button id="add-group-inline-btn" class="group-add-tab-btn" title="Add Group">+</button>
+        </div>
+        <div class="shortcuts" id="shortcuts-grid"></div>
+
+        <div id="most-visited-section" class="most-visited-section hidden">
+            <div class="most-visited-divider">
+                <span>Most Visited</span>
+            </div>
+            <div class="shortcuts most-visited-grid" id="most-visited-grid"></div>
+        </div>
+    </div>
+
+    <!-- Timer & Alarm Panel -->
+    <div id="timer-panel" class="cal-notes-panel glass-card">
+        <div class="cnp-header">
+            <div class="cnp-title-row">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:0.8"><circle cx="12" cy="13" r="8"></circle><polyline points="12 9 12 13 14.5 15.5"></polyline><path d="M5 3L3 5M19 3l2 2"></path></svg>
+                <span class="cnp-title">Timer &amp; Alarm</span>
+                <button id="close-timer" class="icon-btn cnp-close-btn">&times;</button>
+            </div>
+            <!-- Timer/Stopwatch/Alarm tabs -->
+            <div class="timer-tabs">
+                <button class="timer-tab active" data-tab="timer">Timer</button>
+                <button class="timer-tab" data-tab="stopwatch">Stopwatch</button>
+                <button class="timer-tab" data-tab="alarm">Alarm</button>
+                <button class="timer-tab" data-tab="worldclock">Clock</button>
+            </div>
+        </div>
+
+        <!-- ===== TIMER VIEW ===== -->
+        <div id="timer-view" class="timer-view">
+            <div class="timer-display-wrap">
+                <div id="timer-display" class="timer-big-display">00:00:00</div>
+                <div class="timer-progress-ring-wrap">
+                    <svg class="timer-ring" viewBox="0 0 120 120">
+                        <circle class="timer-ring-bg" cx="60" cy="60" r="54"/>
+                        <circle id="timer-ring-progress" class="timer-ring-progress" cx="60" cy="60" r="54"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="timer-presets">
+                <button class="timer-preset-btn" data-seconds="60">1m</button>
+                <button class="timer-preset-btn" data-seconds="300">5m</button>
+                <button class="timer-preset-btn" data-seconds="600">10m</button>
+                <button class="timer-preset-btn" data-seconds="900">15m</button>
+                <button class="timer-preset-btn" data-seconds="1800">30m</button>
+                <button class="timer-preset-btn" data-seconds="3600">1h</button>
+            </div>
+            <div class="timer-custom-row">
+                <input type="number" id="timer-h" class="timer-num-input" min="0" max="23" placeholder="H" title="Hours">
+                <span class="timer-sep">:</span>
+                <input type="number" id="timer-m" class="timer-num-input" min="0" max="59" placeholder="M" title="Minutes">
+                <span class="timer-sep">:</span>
+                <input type="number" id="timer-s" class="timer-num-input" min="0" max="59" placeholder="S" title="Seconds">
+            </div>
+            <div class="timer-label-row">
+                <input type="text" id="timer-label-input" class="timer-label-input" placeholder="Label (optional)" autocomplete="off" maxlength="40">
+            </div>
+            <div class="timer-ctrl-row">
+                <button id="timer-start-btn" class="timer-ctrl-btn timer-ctrl-primary">Start</button>
+                <button id="timer-pause-btn" class="timer-ctrl-btn timer-ctrl-secondary hidden">Pause</button>
+                <button id="timer-resume-btn" class="timer-ctrl-btn timer-ctrl-primary hidden">Resume</button>
+                <button id="timer-reset-btn" class="timer-ctrl-btn timer-ctrl-ghost">Reset</button>
+            </div>
+            <div id="timer-done-msg" class="timer-done-msg hidden">
+                <span>⏰</span><span id="timer-done-label">Time's up!</span>
+                <button id="timer-dismiss-btn" class="timer-ctrl-btn timer-ctrl-ghost" style="margin-top:0.5rem;">Dismiss</button>
+            </div>
+        </div>
+
+        <!-- ===== STOPWATCH VIEW ===== -->
+        <div id="stopwatch-view" class="timer-view hidden">
+            <div class="timer-display-wrap">
+                <div id="sw-display" class="timer-big-display sw-display">00:00.00</div>
+            </div>
+            <div class="timer-ctrl-row">
+                <button id="sw-start-btn" class="timer-ctrl-btn timer-ctrl-primary">Start</button>
+                <button id="sw-pause-btn" class="timer-ctrl-btn timer-ctrl-secondary hidden">Pause</button>
+                <button id="sw-resume-btn" class="timer-ctrl-btn timer-ctrl-primary hidden">Resume</button>
+                <button id="sw-lap-btn" class="timer-ctrl-btn timer-ctrl-ghost hidden">Lap</button>
+                <button id="sw-reset-btn" class="timer-ctrl-btn timer-ctrl-ghost">Reset</button>
+            </div>
+            <div id="sw-laps" class="sw-laps"></div>
+        </div>
+
+        <!-- ===== ALARM VIEW ===== -->
+        <div id="alarm-view" class="timer-view hidden">
+            <div class="alarm-add-section">
+                <div class="alarm-time-row">
+                    <button type="button" id="alarm-time-display" class="alarm-time-display" title="Set time">--:-- --</button>
+                    <input type="text" id="alarm-label-input" placeholder="Label (optional)" autocomplete="off" maxlength="40" class="alarm-label-text">
+                </div>
+                <!-- Custom time picker -->
+                <div id="alarm-time-picker" class="alarm-time-picker hidden">
+                    <div class="atp-col" id="atp-hours"></div>
+                    <div class="atp-sep">:</div>
+                    <div class="atp-col" id="atp-minutes"></div>
+                    <div class="atp-col atp-ampm hidden" id="atp-ampm"></div>
+                </div>
+                <div class="alarm-repeat-row">
+                    <span class="alarm-repeat-label">Repeat:</span>
+                    <div class="alarm-days">
+                        <button class="alarm-day-btn" data-day="0">Su</button>
+                        <button class="alarm-day-btn" data-day="1">Mo</button>
+                        <button class="alarm-day-btn" data-day="2">Tu</button>
+                        <button class="alarm-day-btn" data-day="3">We</button>
+                        <button class="alarm-day-btn" data-day="4">Th</button>
+                        <button class="alarm-day-btn" data-day="5">Fr</button>
+                        <button class="alarm-day-btn" data-day="6">Sa</button>
+                    </div>
+                </div>
+                <button id="alarm-add-btn" class="timer-ctrl-btn timer-ctrl-primary" style="width:100%;margin-top:0.5rem;">Add Alarm</button>
+            </div>
+            <div id="alarm-list" class="alarm-list"></div>
+            <div id="alarm-firing" class="alarm-firing-banner hidden">
+                <span>🔔</span>
+                <span id="alarm-firing-label">Alarm!</span>
+                <button id="alarm-snooze-btn" class="timer-ctrl-btn timer-ctrl-ghost" style="padding:5px 10px;font-size:0.8rem;">Snooze 5m</button>
+                <button id="alarm-dismiss-alarm-btn" class="timer-ctrl-btn timer-ctrl-secondary" style="padding:5px 10px;font-size:0.8rem;">Dismiss</button>
+            </div>
+        </div>
+        <!-- ===== WORLD CLOCK VIEW ===== -->
+        <div id="worldclock-view" class="timer-view hidden">
+            <div class="wc-add-row">
+                <div class="wc-search-wrap">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="wc-search-input" class="wc-search-input" placeholder="Search city or timezone…" autocomplete="off">
+                    <button id="wc-search-clear" class="wc-search-clear hidden">×</button>
+                </div>
+                <div id="wc-suggestions" class="wc-suggestions hidden"></div>
+            </div>
+            <div id="wc-list" class="wc-list"></div>
+            <div id="wc-empty" class="wc-empty hidden">
+                <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.3"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                <p>Search a city above to add a clock</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Panel -->
+    <div id="history-panel" class="cal-notes-panel glass-card">
+        <div class="cnp-header">
+            <div class="cnp-title-row">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:0.8"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <span class="cnp-title">History</span>
+                <button id="close-history" class="icon-btn cnp-close-btn">&times;</button>
+            </div>
+            <div class="bm-search-wrap">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" class="bm-search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="history-search" class="bm-search-input" placeholder="Search history…" autocomplete="off">
+                <button id="history-search-clear" class="bm-search-clear hidden">×</button>
+            </div>
+        </div>
+        <div id="history-tabs" class="history-tabs">
+            <button class="history-tab active" data-tab="recent">Recent</button>
+            <button class="history-tab" data-tab="closed">Recently Closed</button>
+            <button class="history-tab" data-tab="all">All History</button>
+        </div>
+        <div id="history-list" class="bm-list"></div>
+        <div id="history-empty" class="bm-empty hidden">
+            <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.3"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            <p>No history found</p>
+        </div>
+    </div>
+
+    <!-- Bookmarks Panel -->
+    <div id="bookmarks-panel" class="bookmarks-panel glass-card">
+        <div class="bm-header">
+            <div class="bm-title-row">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:0.8"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                <span class="bm-title">Bookmarks</span>
+                <button id="bm-add-btn" class="icon-btn bm-add-btn" title="Add bookmark or folder">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                </button>
+                <button id="close-bookmarks" class="icon-btn bm-close-btn">&times;</button>
+            </div>
+            <div class="bm-search-wrap">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" class="bm-search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="bm-search" class="bm-search-input" placeholder="Search bookmarks…" autocomplete="off">
+                <button id="bm-search-clear" class="bm-search-clear hidden">×</button>
+            </div>
+            <div id="bm-breadcrumb" class="bm-breadcrumb"></div>
+        </div>
+        <div id="bm-list" class="bm-list"></div>
+        <div id="bm-empty" class="bm-empty hidden">
+            <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.3"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+            <p>No bookmarks found</p>
+        </div>
+    </div>
+
+    <!-- Bookmarks Backdrop -->
+    <div id="bookmarks-backdrop" class="bookmarks-backdrop"></div>
+
+    <!-- Shared Side Panel Backdrop (History, Calendar & Notes) -->
+    <div id="side-panel-backdrop" class="side-panel-backdrop"></div>
+
+    <!-- Calendar Panel -->
+    <div id="calendar-panel" class="cal-notes-panel glass-card">
+        <div class="cnp-header">
+            <div class="cnp-title-row">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:0.8"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <span class="cnp-title">Calendar</span>
+                <button id="close-calendar" class="icon-btn cnp-close-btn">&times;</button>
+            </div>
+        </div>
+
+        <!-- Mini Calendar Grid -->
+        <div class="cal-month-nav">
+            <button id="cal-prev" class="icon-btn cal-nav-btn">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <span id="cal-month-label"></span>
+            <button id="cal-next" class="icon-btn cal-nav-btn">
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+        </div>
+        <div class="cal-grid-header">
+            <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+        </div>
+        <div id="cal-grid" class="cal-grid"></div>
+
+        <!-- Events for selected day -->
+        <div class="cal-events-header">
+            <span id="cal-selected-label" class="cal-events-title">Events</span>
+            <button id="cal-add-event-btn" class="cal-add-btn" title="Add event">
+                <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            </button>
+        </div>
+        <div id="cal-events-list" class="cal-events-list"></div>
+
+        <!-- Add Event Form (hidden by default) -->
+        <div id="cal-add-form" class="cal-add-form hidden">
+            <input type="text" id="cal-event-title" placeholder="Event title…" autocomplete="off" class="cal-input">
+            <div class="cal-form-row">
+                <input type="date" id="cal-event-date" class="cal-input">
+                <input type="time" id="cal-event-time" class="cal-input">
+            </div>
+            <input type="text" id="cal-event-location" placeholder="Location (optional)" autocomplete="off" class="cal-input">
+            <div class="cal-color-row">
+                <span class="cal-color-label">Color:</span>
+                <div class="cal-color-swatches">
+                    <button class="cal-swatch active" data-color="#7c8cf8" style="background:#7c8cf8"></button>
+                    <button class="cal-swatch" data-color="#f87c8c" style="background:#f87c8c"></button>
+                    <button class="cal-swatch" data-color="#7cf8b0" style="background:#7cf8b0"></button>
+                    <button class="cal-swatch" data-color="#f8d07c" style="background:#f8d07c"></button>
+                    <button class="cal-swatch" data-color="#c47cf8" style="background:#c47cf8"></button>
+                    <button class="cal-swatch" data-color="#7cd4f8" style="background:#7cd4f8"></button>
+                </div>
+            </div>
+            <div class="cal-form-btns">
+                <button id="cal-save-event" class="primary-btn small-btn">Save Event</button>
+                <button id="cal-cancel-event" class="delete-btn" style="padding:7px 14px;">Cancel</button>
+            </div>
+        </div>
+
+        <!-- External Calendar Sync -->
+        <div class="cal-sync-section">
+            <div class="cal-sync-label">Sync External Calendar</div>
+            <p class="cal-sync-hint">Paste a public iCal URL from Google Calendar, Outlook, or Apple Calendar. Get it from your calendar's sharing/export settings.</p>
+            <div class="cal-ical-row">
+                <input type="url" id="cal-ical-url" class="cal-input" placeholder="https://calendar.google.com/…/basic.ics" autocomplete="off">
+            </div>
+            <button id="cal-ical-save" class="cal-sync-btn">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" style="flex-shrink:0"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Fetch &amp; Sync Events
+            </button>
+            <div id="cal-sync-status" class="cal-sync-status hidden"></div>
+            <div class="cal-sync-guide">
+                <details>
+                    <summary>How to get your iCal URL</summary>
+                    <div class="cal-guide-content">
+                        <strong>Google Calendar:</strong> Open calendar settings → "Integrate calendar" → copy the "Public address in iCal format" link.<br><br>
+                        <strong>Outlook:</strong> Settings → View all → Calendar → Shared calendars → Publish → copy ICS link.<br><br>
+                        <strong>Apple Calendar:</strong> Right-click calendar → Share Calendar → enable "Public Calendar" → copy link.
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notes Panel -->
+    <div id="notes-panel" class="cal-notes-panel glass-card">
+        <div class="cnp-header">
+            <div class="cnp-title-row">
+                <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:0.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                <span class="cnp-title">Notes</span>
+                <button id="close-notes" class="icon-btn cnp-close-btn">&times;</button>
+            </div>
+            <div class="notes-toolbar">
+                <div class="notes-search-wrap">
+                    <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2.5" fill="none" style="opacity:0.45;flex-shrink:0"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" id="notes-search" class="bm-search-input" placeholder="Search notes…" autocomplete="off">
+                    <button id="notes-search-clear" class="bm-search-clear hidden">×</button>
+                </div>
+                <button id="notes-new-btn" class="notes-new-btn" title="New note">
+                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- List view -->
+        <div id="notes-list-view">
+            <div id="notes-list" class="notes-list"></div>
+            <div id="notes-empty" class="bm-empty hidden">
+                <svg viewBox="0 0 24 24" width="36" height="36" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.3"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                <p>No notes yet.<br>Hit + to create one.</p>
+            </div>
+        </div>
+
+        <!-- Editor view -->
+        <div id="notes-editor-view" class="hidden">
+            <div class="notes-editor-header">
+                <button id="notes-back-btn" class="icon-btn notes-back-btn">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <input type="text" id="notes-title-input" class="notes-title-input" placeholder="Note title…" autocomplete="off">
+                <button id="notes-delete-btn" class="icon-btn notes-delete-icon" title="Delete note">
+                    <svg viewBox="0 0 24 24" width="17" height="17" stroke="currentColor" stroke-width="2" fill="none"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14H6L5 6"></path><path d="M10 11v6M14 11v6"></path><path d="M9 6V4h6v2"></path></svg>
+                </button>
+            </div>
+            <div class="notes-format-bar">
+                <button class="notes-fmt-btn" data-cmd="bold" title="Bold"><b>B</b></button>
+                <button class="notes-fmt-btn" data-cmd="italic" title="Italic"><i>I</i></button>
+                <button class="notes-fmt-btn" data-cmd="underline" title="Underline"><u>U</u></button>
+                <button class="notes-fmt-btn" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+                <div class="notes-fmt-sep"></div>
+                <button class="notes-fmt-btn" data-cmd="formatBlock" data-val="H1" title="Large Heading" style="font-size:0.78rem;font-weight:700;letter-spacing:-0.3px;">H1</button>
+                <button class="notes-fmt-btn" data-cmd="formatBlock" data-val="H2" title="Medium Heading" style="font-size:0.78rem;font-weight:700;">H2</button>
+                <button class="notes-fmt-btn" data-cmd="formatBlock" data-val="H3" title="Small Heading" style="font-size:0.78rem;font-weight:700;opacity:0.8;">H3</button>
+                <div class="notes-fmt-sep"></div>
+                <button class="notes-fmt-btn" data-cmd="insertUnorderedList" title="Bullet list">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="9" y1="6" x2="20" y2="6"></line><line x1="9" y1="12" x2="20" y2="12"></line><line x1="9" y1="18" x2="20" y2="18"></line><circle cx="4" cy="6" r="1.2" fill="currentColor" stroke="none"></circle><circle cx="4" cy="12" r="1.2" fill="currentColor" stroke="none"></circle><circle cx="4" cy="18" r="1.2" fill="currentColor" stroke="none"></circle></svg>
+                </button>
+                <button class="notes-fmt-btn" data-cmd="insertOrderedList" title="Numbered list">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><line x1="10" y1="6" x2="21" y2="6"></line><line x1="10" y1="12" x2="21" y2="12"></line><line x1="10" y1="18" x2="21" y2="18"></line><text x="1" y="8.5" font-size="7" fill="currentColor" stroke="none">1.</text><text x="1" y="14.5" font-size="7" fill="currentColor" stroke="none">2.</text><text x="1" y="20.5" font-size="7" fill="currentColor" stroke="none">3.</text></svg>
+                </button>
+                <button class="notes-fmt-btn notes-checkbox-btn" data-cmd="insertCheckbox" title="Add Checkbox">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="18" height="18" rx="3"></rect><polyline points="8 12 11 15 16 9"></polyline></svg>
+                </button>
+                <div class="notes-fmt-sep"></div>
+                <div class="notes-color-dots">
+                    <button class="note-dot active" data-color="#7c8cf8" style="background:#7c8cf8" title="Blue"></button>
+                    <button class="note-dot" data-color="#f87c8c" style="background:#f87c8c" title="Red"></button>
+                    <button class="note-dot" data-color="#7cf8b0" style="background:#7cf8b0" title="Green"></button>
+                    <button class="note-dot" data-color="#f8d07c" style="background:#f8d07c" title="Yellow"></button>
+                    <button class="note-dot" data-color="#c47cf8" style="background:#c47cf8" title="Purple"></button>
+                </div>
+                <span id="notes-save-status" class="notes-save-status">Saved</span>
+            </div>
+            <div id="notes-body" class="notes-body" contenteditable="true" spellcheck="true"></div>
+            <div class="notes-editor-footer">
+                <span id="notes-word-count" class="notes-word-count">0 words</span>
+                <span id="notes-last-edited" class="notes-last-edited"></span>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3>Settings</h3>
+                <button id="close-modal" class="icon-btn">&times;</button>
+            </div>
+            
+            <div class="setting-section">
+                <h4>Background Wallpaper</h4>
+                <select id="bg-type-select">
+                    <option value="default">Default Blur Art</option>
+                    <option value="rotation">Lorem Picsum Rotation (Image)</option>
+                    <option value="pixabay">Pixabay Video Rotation</option>
+                    <option value="web">Web Image URL</option>
+                    <option value="local">Local File Upload</option>
+                    <option value="slideshow">Slideshow (Folder / Multiple Photos)</option>
+                    <option value="video-slideshow">Video Slideshow (Folder / Multiple Videos)</option>
+                    <option value="mixed-slideshow">Mixed Slideshow (Photos + Videos Together)</option>
+                </select>
+
+                <div class="bg-input-group-vertical" style="margin-top: 0.6rem;">
+                    <label class="setting-label">Background Fit:</label>
+                    <select id="bg-fit-select">
+                        <option value="cover">Fill (Cover)</option>
+                        <option value="contain">Fit (Contain)</option>
+                        <option value="stretch">Stretch (100% × 100%)</option>
+                        <option value="center">Center (Actual Size)</option>
+                        <option value="tile">Tile (Repeat)</option>
+                    </select>
+                </div>
+
+                <!-- Shown when a linked ("+ Add Folder") slideshow folder needs read
+                     permission re-confirmed — e.g. after a full browser restart. -->
+                <div id="fsa-reconnect-banner" class="fsa-reconnect-banner hidden">
+                    <span id="fsa-reconnect-text"></span>
+                    <button id="fsa-reconnect-btn" type="button" class="primary-btn small-btn">Reconnect</button>
+                </div>
+                <!-- Pixabay video rotation — free API key from pixabay.com/api/docs -->
+                <div id="bg-pixabay-group" class="bg-input-group-vertical hidden">
+                    <div id="pixabay-key-entry">
+                        <label class="setting-label">Pixabay API Key <span style="opacity:0.5;font-weight:400;">(free)</span></label>
+                        <div class="bg-input-group">
+                            <input type="password" id="pixabay-api-key-input" placeholder="Paste your free key…" autocomplete="off">
+                            <button id="save-pixabay-key-btn" class="primary-btn small-btn">Save</button>
+                        </div>
+                        <p class="setting-hint">Get a free key at <a href="https://pixabay.com/api/docs/" target="_blank" style="color:inherit;text-decoration:underline;">pixabay.com/api/docs</a> — no credit card.</p>
+                    </div>
+                    <div id="pixabay-key-saved" class="hidden" style="display:flex;align-items:center;gap:8px;margin-bottom:0.4rem;">
+                        <span style="font-size:0.82rem;opacity:0.6;">✓ API key saved</span>
+                        <button id="pixabay-change-key-btn" style="font-size:0.75rem;opacity:0.5;background:none;border:none;color:inherit;cursor:pointer;text-decoration:underline;padding:0;">change</button>
+                        <button id="pixabay-delete-key-btn" style="font-size:0.75rem;opacity:0.5;background:none;border:none;color:inherit;cursor:pointer;text-decoration:underline;padding:0;">delete</button>
+                    </div>
+                    <label class="setting-label">Video Quality:</label>
+                    <select id="pixabay-quality-select">
+                        <option value="720">720p (Faster Loading)</option>
+                        <option value="1080">1080p (Higher Quality)</option>
+                    </select>
+                    <label class="setting-label">Update Interval:</label>
+                    <select id="pixabay-interval-select">
+                        <option value="1">Every Hour</option>
+                        <option value="12">Every 12 Hours</option>
+                        <option value="24">Every Day</option>
+                        <option value="newtab">Every New Tab</option>
+                        <option value="locked">🔒 Locked (keep current)</option>
+                    </select>
+                </div>
+                
+                <div id="bg-rotation-group" class="bg-input-group-vertical hidden">
+                    <label class="setting-label">Update Interval:</label>
+                    <select id="bg-interval-select">
+                        <option value="1">Every Hour</option>
+                        <option value="12">Every 12 Hours</option>
+                        <option value="24">Every Day</option>
+                        <option value="newtab">Every New Tab</option>
+                        <option value="locked">🔒 Locked (keep current)</option>
+                    </select>
+                </div>
+                
+                <div id="bg-web-group" class="bg-input-group hidden">
+                    <input type="url" id="bg-url-input" placeholder="Paste image URL (https://...)" autocomplete="off">
+                    <button id="save-bg-url-btn" class="primary-btn small-btn">Apply</button>
+                </div>
+
+                <div id="bg-local-group" class="bg-input-group hidden">
+                    <label for="bg-file-input" class="file-label">Choose Image or Video File</label>
+                    <input type="file" id="bg-file-input" accept="image/*,video/*">
+                </div>
+
+                <div id="bg-slideshow-group" class="bg-input-group-vertical hidden">
+                    <div class="slideshow-add-row">
+                        <label for="slideshow-photos-input" class="file-label">+ Add Photos</label>
+                        <input type="file" id="slideshow-photos-input" accept="image/*" multiple>
+                        <label for="slideshow-folder-input" class="file-label" title="Links the folder directly and streams photos from disk — instant, nothing is copied (falls back to importing if your browser doesn't support this).">+ Add Folder ⚡</label>
+                        <input type="file" id="slideshow-folder-input" webkitdirectory directory multiple>
+                    </div>
+
+                    <div id="slideshow-thumb-grid" class="slideshow-thumb-grid"></div>
+                    <p id="slideshow-empty-hint" class="slideshow-empty-hint">No photos yet — add some above.</p>
+                    <div id="slideshow-folder-list" class="slideshow-folder-list hidden"></div>
+
+                    <label class="setting-label">Change Image:</label>
+                    <select id="slideshow-interval-select">
+                        <option value="10000">Every 10 Seconds</option>
+                        <option value="30000">Every 30 Seconds</option>
+                        <option value="60000">Every Minute</option>
+                        <option value="300000">Every 5 Minutes</option>
+                        <option value="900000">Every 15 Minutes</option>
+                        <option value="1800000">Every 30 Minutes</option>
+                        <option value="3600000">Every Hour</option>
+                        <option value="newtab">Every New Tab</option>
+                        <option value="locked">🔒 Locked (keep current)</option>
+                    </select>
+
+                    <div class="slideshow-controls-row">
+                        <button id="slideshow-prev-btn" type="button" class="primary-btn small-btn">‹ Prev</button>
+                        <button id="slideshow-next-btn" type="button" class="primary-btn small-btn">Next ›</button>
+                        <button id="slideshow-shuffle-btn" type="button" class="primary-btn small-btn" title="Shuffle order">🔀 Shuffle</button>
+                        <button id="slideshow-clear-btn" type="button" class="delete-btn">Clear All</button>
+                    </div>
+                </div>
+
+                <div id="bg-video-slideshow-group" class="bg-input-group-vertical hidden">
+                    <div class="slideshow-add-row">
+                        <label for="video-slideshow-videos-input" class="file-label">+ Add Videos</label>
+                        <input type="file" id="video-slideshow-videos-input" accept="video/*" multiple>
+                        <label for="video-slideshow-folder-input" class="file-label" title="Links the folder directly and streams videos from disk — instant, nothing is copied (falls back to importing if your browser doesn't support this).">+ Add Folder ⚡</label>
+                        <input type="file" id="video-slideshow-folder-input" webkitdirectory directory multiple>
+                    </div>
+
+                    <div id="video-slideshow-thumb-grid" class="slideshow-thumb-grid"></div>
+                    <p id="video-slideshow-empty-hint" class="slideshow-empty-hint">No videos yet — add some above.</p>
+                    <div id="video-slideshow-folder-list" class="slideshow-folder-list hidden"></div>
+
+                    <label class="setting-label">Change Video:</label>
+                    <select id="video-slideshow-interval-select">
+                        <option value="10000">Every 10 Seconds</option>
+                        <option value="30000">Every 30 Seconds</option>
+                        <option value="60000">Every Minute</option>
+                        <option value="300000">Every 5 Minutes</option>
+                        <option value="900000">Every 15 Minutes</option>
+                        <option value="1800000">Every 30 Minutes</option>
+                        <option value="3600000">Every Hour</option>
+                        <option value="newtab">Every New Tab</option>
+                        <option value="locked">🔒 Locked (keep current)</option>
+                    </select>
+
+                    <div class="slideshow-controls-row">
+                        <button id="video-slideshow-prev-btn" type="button" class="primary-btn small-btn">‹ Prev</button>
+                        <button id="video-slideshow-next-btn" type="button" class="primary-btn small-btn">Next ›</button>
+                        <button id="video-slideshow-shuffle-btn" type="button" class="primary-btn small-btn" title="Shuffle order">🔀 Shuffle</button>
+                        <button id="video-slideshow-clear-btn" type="button" class="delete-btn">Clear All</button>
+                    </div>
+                </div>
+
+                <!-- Mixed Slideshow — photos and videos together in one playlist -->
+                <div id="bg-mixed-slideshow-group" class="bg-input-group-vertical hidden">
+                    <div class="slideshow-add-row">
+                        <label for="mixed-slideshow-files-input" class="file-label">+ Add Photos / Videos</label>
+                        <input type="file" id="mixed-slideshow-files-input" accept="image/*,video/*" multiple>
+                        <label for="mixed-slideshow-folder-input" class="file-label" title="Links the folder directly and streams photos/videos from disk — instant, nothing is copied (falls back to importing if your browser doesn't support this).">+ Add Folder ⚡</label>
+                        <input type="file" id="mixed-slideshow-folder-input" webkitdirectory directory multiple>
+                    </div>
+
+                    <div id="mixed-slideshow-thumb-grid" class="slideshow-thumb-grid"></div>
+                    <p id="mixed-slideshow-empty-hint" class="slideshow-empty-hint">No photos or videos yet — add some above.</p>
+                    <div id="mixed-slideshow-folder-list" class="slideshow-folder-list hidden"></div>
+
+                    <label class="setting-label">Change Slide:</label>
+                    <select id="mixed-slideshow-interval-select">
+                        <option value="10000">Every 10 Seconds</option>
+                        <option value="30000">Every 30 Seconds</option>
+                        <option value="60000">Every Minute</option>
+                        <option value="300000">Every 5 Minutes</option>
+                        <option value="900000">Every 15 Minutes</option>
+                        <option value="1800000">Every 30 Minutes</option>
+                        <option value="3600000">Every Hour</option>
+                        <option value="newtab">Every New Tab</option>
+                        <option value="locked">🔒 Locked (keep current)</option>
+                    </select>
+
+                    <div class="slideshow-controls-row">
+                        <button id="mixed-slideshow-prev-btn" type="button" class="primary-btn small-btn">‹ Prev</button>
+                        <button id="mixed-slideshow-next-btn" type="button" class="primary-btn small-btn">Next ›</button>
+                        <button id="mixed-slideshow-shuffle-btn" type="button" class="primary-btn small-btn" title="Shuffle order">🔀 Shuffle</button>
+                        <button id="mixed-slideshow-clear-btn" type="button" class="delete-btn">Clear All</button>
+                    </div>
+                </div>
+                <!-- Video controls — shown only when a video background is active -->
+                <div id="bg-video-controls" class="bg-video-controls hidden">
+                    <div class="bg-vc-row">
+                        <label class="setting-label">Zoom</label>
+                        <input type="range" id="vid-zoom" min="100" max="200" value="100" step="1">
+                        <span id="vid-zoom-val" class="vc-val">100%</span>
+                    </div>
+                    <div class="bg-vc-row">
+                        <label class="setting-label">Speed</label>
+                        <input type="range" id="vid-speed" min="25" max="200" value="100" step="25">
+                        <span id="vid-speed-val" class="vc-val">1×</span>
+                    </div>
+                    <div class="bg-vc-row">
+                        <label class="setting-label">Fade Loop</label>
+                        <input type="range" id="vid-fade" min="0" max="3" value="0" step="0.5">
+                        <span id="vid-fade-val" class="vc-val">Off</span>
+                    </div>
+                    <div class="bg-vc-row" style="gap:10px;">
+                        <label class="setting-label" style="flex:1;" for="vid-mute-toggle">Mute</label>
+                        <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
+                            <input type="checkbox" id="vid-mute-toggle" checked style="opacity:0;width:0;height:0;position:absolute;">
+                            <span id="vid-mute-track" style="position:absolute;inset:0;background:rgba(255,255,255,0.15);border-radius:20px;transition:background 0.2s;"></span>
+                            <span id="vid-mute-thumb" style="position:absolute;left:3px;top:2px;width:16px;height:16px;background:white;border-radius:50%;transition:transform 0.2s;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="bg-input-group-vertical" style="margin-top: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <label class="setting-label">Glass Blur Intensity:</label>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span id="blur-value-display" style="font-size: 0.85rem; opacity: 0.8; font-weight: 600;">25px</span>
+                            <button id="reset-blur-btn" type="button" style="background: none; border: none; color: #ff6b6b; font-size: 0.75rem; cursor: pointer; padding: 0; text-decoration: underline; opacity: 0.8;">Reset</button>
+                        </div>
+                    </div>
+                    <input type="range" id="blur-slider" min="0" max="50" value="25" step="1" style="width: 100%; cursor: pointer;">
+                </div>
+
+                <div class="bg-input-group-vertical" style="margin-top: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <label class="setting-label">Glass Color Intensity:</label>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span id="color-intensity-value-display" style="font-size: 0.85rem; opacity: 0.8; font-weight: 600;">25%</span>
+                            <button id="reset-color-intensity-btn" type="button" style="background: none; border: none; color: #ff6b6b; font-size: 0.75rem; cursor: pointer; padding: 0; text-decoration: underline; opacity: 0.8;">Reset</button>
+                        </div>
+                    </div>
+                    <input type="range" id="color-intensity-slider" min="-100" max="80" value="0" step="1" style="width: 100%; cursor: pointer;">
+                </div>
+
+                <!-- Glass Blur Color Picker -->
+                <div class="bg-input-group-vertical" style="margin-top: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label class="setting-label">Glass Blur Color:</label>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <div id="glass-color-preview" style="width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.18);flex-shrink:0;"></div>
+                            <button id="reset-glass-color-btn" type="button" style="background: none; border: none; color: #ff6b6b; font-size: 0.75rem; cursor: pointer; padding: 0; text-decoration: underline; opacity: 0.8;">Reset</button>
+                        </div>
+                    </div>
+                    <div class="hsv-picker">
+                        <div class="hsv-sv-box" id="glass-sv-box">
+                            <div class="hsv-sv-thumb" id="glass-sv-thumb"></div>
+                        </div>
+                        <div class="hsv-hue-slider" id="glass-hue-slider">
+                            <div class="hsv-hue-thumb" id="glass-hue-thumb"></div>
+                        </div>
+                    </div>
+                    <div class="hsv-hex-row">
+                        <span class="hsv-hex-label">HEX</span>
+                        <input type="text" id="glass-color-hex" class="hsv-hex-input" maxlength="7" autocomplete="off" spellcheck="false" placeholder="#000000">
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; padding: 10px 14px; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                    <label class="setting-label" style="margin: 0; cursor: pointer;" for="dark-text-toggle">Dark Text Mode</label>
+                    <label style="position: relative; display: inline-block; width: 42px; height: 24px; cursor: pointer;">
+                        <input type="checkbox" id="dark-text-toggle" style="opacity: 0; width: 0; height: 0; position: absolute;">
+                        <span id="toggle-track" style="position: absolute; inset: 0; background: rgba(255,255,255,0.15); border-radius: 24px; transition: background 0.2s;"></span>
+                        <span id="toggle-thumb" style="position: absolute; left: 3px; top: 3px; width: 18px; height: 18px; background: white; border-radius: 50%; transition: transform 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.3);"></span>
+                    </label>
+                </div>
+
+                <!-- Custom Text Color Picker -->
+                <div class="bg-input-group-vertical" style="margin-top: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label class="setting-label">Custom Text Color:</label>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <div id="text-color-preview" style="width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);background:#ffffff;flex-shrink:0;"></div>
+                            <span id="text-color-status" style="font-size:0.72rem;opacity:0.55;font-style:italic;">overrides toggle</span>
+                            <button id="reset-text-color-btn" type="button" style="background: none; border: none; color: #ff6b6b; font-size: 0.75rem; cursor: pointer; padding: 0; text-decoration: underline; opacity: 0.8;">Reset</button>
+                        </div>
+                    </div>
+                    <div class="hsv-picker">
+                        <div class="hsv-sv-box" id="text-sv-box">
+                            <div class="hsv-sv-thumb" id="text-sv-thumb"></div>
+                        </div>
+                        <div class="hsv-hue-slider" id="text-hue-slider">
+                            <div class="hsv-hue-thumb" id="text-hue-thumb"></div>
+                        </div>
+                    </div>
+                    <div class="hsv-hex-row">
+                        <span class="hsv-hex-label">HEX</span>
+                        <input type="text" id="text-color-hex" class="hsv-hex-input" maxlength="7" autocomplete="off" spellcheck="false" placeholder="#ffffff">
+                    </div>
+                </div>
+
+                <!-- Texture Overlay Controls -->
+                <div class="bg-input-group-vertical" style="margin-top: 0.75rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label class="setting-label">Texture Overlay</label>
+                    </div>
+                    <select id="texture-overlay-select" style="width:100%; padding:7px 10px; border-radius:8px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); color:inherit; font-size:0.85rem; cursor:pointer;">
+                        <option value="none">None</option>
+                        <option value="grain">Grain</option>
+                        <option value="vector-grain">Vector grain</option>
+                        <option value="diagonal-dots">Diagonal dots</option>
+                        <option value="vertical-dots">Vertical dots</option>
+                        <option value="topographic">Topographic</option>
+                        <option value="aztec">Aztec</option>
+                        <option value="checkerboard">Checkerboard</option>
+                        <option value="isometric">Isometric</option>
+                        <option value="circuit-board">Circuit board</option>
+                        <option value="tic-tac-toe">Tic-tac-toe</option>
+                        <option value="endless-clouds">Endless clouds</option>
+                        <option value="waves">Waves</option>
+                        <option value="honeycomb">Honeycomb</option>
+                        <option value="grid">Grid</option>
+                        <option value="vertical-lines">Vertical lines</option>
+                        <option value="horizontal-lines">Horizontal lines</option>
+                        <option value="diagonal-lines">Diagonal lines</option>
+                        <option value="vertical-stripes">Vertical stripes</option>
+                        <option value="horizontal-stripes">Horizontal stripes</option>
+                        <option value="diagonal-stripes">Diagonal stripes</option>
+                    </select>
+                </div>
+
+                <div class="bg-input-group-vertical" id="texture-sliders-wrap" style="margin-top:0.5rem; display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <label class="setting-label">Texture Opacity</label>
+                        <span id="texture-opacity-display" style="font-size:0.85rem; opacity:0.8; font-weight:600;">30%</span>
+                    </div>
+                    <input type="range" id="texture-opacity-slider" min="1" max="100" value="30" step="1" style="width:100%; cursor:pointer; margin-top:4px;">
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.6rem;">
+                        <label class="setting-label">Texture Density</label>
+                        <span id="texture-density-display" style="font-size:0.85rem; opacity:0.8; font-weight:600;">1×</span>
+                    </div>
+                    <input type="range" id="texture-density-slider" min="1" max="10" value="3" step="1" style="width:100%; cursor:pointer; margin-top:4px;">
+                </div>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="setting-section">
+                <h4>Clock</h4>
+
+                <!-- Enable/Disable clock -->
+                <div class="setting-toggle-row-full">
+                    <label class="setting-label" for="clock-enabled-toggle">Show Clock</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="clock-enabled-toggle" checked>
+                        <span class="toggle-track"></span><span class="toggle-thumb"></span>
+                    </label>
+                </div>
+
+                <!-- Clock type -->
+                <label class="setting-label" style="margin-top:0.6rem;">Clock Type</label>
+                <select id="clock-type-select">
+                    <option value="digital">Digital</option>
+                    <option value="analog">Analog</option>
+                </select>
+
+                <!-- Digital format (hidden when analog) -->
+                <div id="digital-clock-opts">
+                    <label class="setting-label" style="margin-top:0.5rem;">Format</label>
+                    <select id="clock-format-select">
+                        <option value="24">24-Hour (14:30)</option>
+                        <option value="12">12-Hour (2:30 PM)</option>
+                    </select>
+                </div>
+
+                <!-- Analog options (hidden when digital) -->
+                <div id="analog-clock-opts" class="hidden">
+                    <label class="setting-label" style="margin-top:0.5rem;">Shape</label>
+                    <select id="analog-shape-select">
+                        <option value="round">Round</option>
+                        <option value="square">Square</option>
+                        <option value="rectangle">Rectangle</option>
+                    </select>
+
+                    <label class="setting-label" style="margin-top:0.5rem;">Clock Face</label>
+                    <select id="analog-face-select">
+                        <option value="none">None</option>
+                        <option value="numbers">Numbers</option>
+                        <option value="romans">Roman Numerals</option>
+                        <option value="marks">Marks</option>
+                        <option value="swiss">Swiss Railway</option>
+                        <option value="braun">Braun</option>
+                    </select>
+
+                    <label class="setting-label" style="margin-top:0.5rem;">Clock Hands</label>
+                    <select id="analog-hands-select">
+                        <option value="classic">Classic</option>
+                        <option value="swiss">Swiss Railway</option>
+                        <option value="braun">Braun</option>
+                        <option value="apple">Apple Watch</option>
+                    </select>
+
+                    <div class="bg-vc-row" style="margin-top:0.6rem;">
+                        <label class="setting-label">Face Opacity</label>
+                        <input type="range" id="analog-bg-opacity" min="0" max="100" value="60" step="1">
+                        <span id="analog-bg-opacity-val" class="vc-val">60%</span>
+                        <button id="reset-analog-bg-btn" type="button" style="background:none;border:none;color:#ff6b6b;font-size:0.75rem;cursor:pointer;padding:0;text-decoration:underline;opacity:0.8;">Reset</button>
+                    </div>
+                    <div class="bg-vc-row">
+                        <label class="setting-label">Border Opacity</label>
+                        <input type="range" id="analog-border-opacity" min="0" max="100" value="70" step="1">
+                        <span id="analog-border-opacity-val" class="vc-val">70%</span>
+                        <button id="reset-analog-border-btn" type="button" style="background:none;border:none;color:#ff6b6b;font-size:0.75rem;cursor:pointer;padding:0;text-decoration:underline;opacity:0.8;">Reset</button>
+                    </div>
+                </div>
+
+                <!-- Date display -->
+                <div class="setting-toggle-row-full" style="margin-top:0.6rem;">
+                    <label class="setting-label" for="date-enabled-toggle">Show Date</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="date-enabled-toggle">
+                        <span class="toggle-track"></span><span class="toggle-thumb"></span>
+                    </label>
+                </div>
+                <div id="date-format-opts" class="hidden">
+                    <label class="setting-label" style="margin-top:0.4rem;">Date Format</label>
+                    <select id="date-format-select">
+                        <option value="long">Wednesday, June 11, 2025</option>
+                        <option value="medium">Jun 11, 2025</option>
+                        <option value="short">06/11/2025</option>
+                        <option value="iso">2025-06-11</option>
+                        <option value="daymonth">11 June 2025</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="setting-section">
+                <h4>Weather</h4>
+
+                <!-- Location mode -->
+                <label class="setting-label">Location</label>
+                <select id="weather-location-mode">
+                    <option value="auto">📡 Auto-detect (GPS)</option>
+                    <option value="manual">🏙️ Choose a city</option>
+                </select>
+
+                <!-- Manual city search (hidden by default) -->
+                <div id="weather-city-wrap" class="hidden" style="margin-top:0.5rem;">
+                    <div style="display:flex;gap:6px;align-items:center;">
+                        <input type="text" id="weather-city-input" placeholder="e.g. Cairo, London…" style="flex:1;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:6px 10px;color:inherit;font-size:0.84rem;outline:none;">
+                        <button id="weather-city-search-btn" class="primary-btn small-btn" style="flex-shrink:0;">Search</button>
+                    </div>
+                    <div id="weather-city-status" style="font-size:0.78rem;opacity:0.65;margin-top:4px;min-height:1em;"></div>
+                </div>
+
+                <!-- Temp unit -->
+                <label class="setting-label" style="margin-top:0.5rem;">Temperature Unit</label>
+                <select id="weather-unit-select">
+                    <option value="C">Celsius (°C)</option>
+                    <option value="F">Fahrenheit (°F)</option>
+                </select>
+
+                <!-- Display mode -->
+                <label class="setting-label" style="margin-top:0.5rem;">Display</label>
+                <select id="weather-display-select">
+                    <option value="both">Icon + Description</option>
+                    <option value="desc">Description Only</option>
+                    <option value="icon">Icon Only</option>
+                </select>
+
+                <!-- Quotes toggle + interval -->
+                <div class="setting-toggle-row-full" style="margin-top:0.4rem;">
+                    <label class="setting-label" for="quotes-toggle">Show Quotes</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="quotes-toggle">
+                        <span class="toggle-track"></span><span class="toggle-thumb"></span>
+                    </label>
+                </div>
+                <div id="quote-interval-wrap" class="hidden">
+                    <label class="setting-label" style="margin-top:0.4rem;">Refresh Quote Every</label>
+                    <div style="display:flex;gap:6px;align-items:center;">
+                        <select id="quote-interval-select" style="flex:1;">
+                            <option value="1">Every Hour</option>
+                            <option value="12">Every 12 Hours</option>
+                            <option value="24">Every Day</option>
+                            <option value="newtab">Every New Tab</option>
+                            <option value="locked">🔒 Locked (keep current)</option>
+                        </select>
+                        <button id="quote-refresh-btn" class="primary-btn small-btn" title="Get a new quote now" style="flex-shrink:0;">↻ New</button>
+                    </div>
+                </div>
+
+                <!-- Greeting toggle -->
+                <div class="setting-toggle-row-full">
+                    <label class="setting-label" for="greeting-toggle">Show Greeting</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="greeting-toggle" checked>
+                        <span class="toggle-track"></span><span class="toggle-thumb"></span>
+                    </label>
+                </div>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="setting-section">
+                <h4>Page &amp; Search</h4>
+                <label class="setting-label">Tab Title</label>
+                <div style="display:flex;gap:6px;">
+                    <input type="text" id="tab-title-input" placeholder="New Tab" autocomplete="off" maxlength="80" style="flex:1;">
+                    <button id="reset-tab-title-btn" class="delete-btn" style="white-space:nowrap;padding:0 10px;">Reset</button>
+                </div>
+                <label class="setting-label" style="margin-top:0.4rem;">Search Placeholder</label>
+                <div style="display:flex;gap:6px;">
+                    <input type="text" id="search-placeholder-input" placeholder="Search the web..." autocomplete="off" maxlength="80" style="flex:1;">
+                    <button id="reset-search-placeholder-btn" class="delete-btn" style="white-space:nowrap;padding:0 10px;">Reset</button>
+                </div>
+                <label class="setting-label" style="margin-top:0.4rem;">New Tab Icon</label>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <img id="tab-icon-preview" src="icon48.png" alt="" width="28" height="28" style="border-radius:6px;flex-shrink:0;background:rgba(255,255,255,0.08);">
+                    <label for="tab-icon-input" class="file-label" style="flex:1;margin:0;padding:10px;font-size:0.85rem;">Choose Image</label>
+                    <input type="file" id="tab-icon-input" accept="image/*" style="display:none;">
+                    <button id="reset-tab-icon-btn" class="delete-btn" style="white-space:nowrap;padding:0 10px;">Reset</button>
+                </div>
+                <p class="setting-hint">Changes the icon shown in the browser tab for this new tab page. A square image works best.</p>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="setting-section">
+                <h4>Side Buttons</h4>
+                <p class="setting-label" style="margin-bottom:0.25rem;">Drag to reorder. Toggle visibility below.</p>
+                <div id="side-buttons-manage" class="side-btn-manage-list"></div>
+                <div style="display:flex; gap:12px; margin-top:0.5rem; flex-wrap:wrap;">
+                    <label class="setting-toggle-row" style="display:flex;align-items:center;gap:8px;font-size:0.84rem;opacity:0.8;cursor:pointer;">
+                        <input type="checkbox" id="lock-side-btns-toggle" style="width:14px;height:14px;cursor:pointer;">
+                        Lock side button order
+                    </label>
+                </div>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="setting-section">
+                <h4>Shortcut Layout</h4>
+                <label class="setting-label">Shortcuts per Row</label>
+                <div style="display:flex;align-items:center;gap:0.6rem;margin-top:0.35rem;">
+                    <input type="number" id="shortcut-cols-input" min="4" max="12" value="6"
+                        style="width:70px;padding:6px 10px;border-radius:8px;font-size:0.9rem;text-align:center;">
+                    <span class="setting-label" style="opacity:0.55;font-size:0.8rem;">per row (4 – 12)</span>
+                </div>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="setting-section">
+                <h4>Shortcut Groups</h4>
+                <div class="setting-toggle-row-full">
+                    <label class="setting-label" for="groups-enabled-toggle">Enable Groups</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="groups-enabled-toggle">
+                        <span class="toggle-track"></span><span class="toggle-thumb"></span>
+                    </label>
+                </div>
+                <div id="groups-manage-wrap" class="hidden">
+                    <div id="groups-manage-list" class="manage-list" style="max-height:160px;"></div>
+                    <div style="display:flex;gap:6px;margin-top:0.5rem;">
+                        <input type="text" id="new-group-name-input" placeholder="Group name…" autocomplete="off" maxlength="30" style="flex:1;font-size:0.85rem;">
+                        <button id="add-group-btn" class="primary-btn small-btn">Add</button>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="setting-section">
+                <h4>Most Visited Sites</h4>
+                <div class="setting-toggle-row-full">
+                    <label class="setting-label" for="most-visited-toggle">Show Most Visited</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="most-visited-toggle">
+                        <span class="toggle-track"></span><span class="toggle-thumb"></span>
+                    </label>
+                </div>
+                <div id="most-visited-count-wrap" class="hidden">
+                    <label class="setting-label">Rows to Show</label>
+                    <select id="most-visited-count-select">
+                        <option value="1">1 row</option>
+                        <option value="2" selected>2 rows</option>
+                        <option value="3">3 rows (up to 10 sites)</option>
+                        <option value="4">4 rows (up to 10 sites)</option>
+                    </select>
+                </div>
+                <div class="setting-toggle-row-full" id="most-visited-restore-row">
+                    <span class="setting-label" id="most-visited-hidden-label">No hidden sites</span>
+                    <button id="most-visited-restore-btn" type="button" class="primary-btn small-btn" disabled>Restore Hidden</button>
+                </div>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="setting-section">
+                <h4>Add New Shortcut</h4>
+                <div id="add-shortcut-form-wrap">
+                    <input type="text" id="site-name" placeholder="Website Name" autocomplete="off">
+                    <input type="url" id="site-url" placeholder="URL (https://...)" autocomplete="off">
+                    <select id="site-group-select" style="display:none;">
+                        <option value="">No Group</option>
+                    </select>
+                    <button id="add-shortcut-btn" class="primary-btn">Add Shortcut</button>
+                </div>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="setting-section">
+                <h4>Manage Shortcuts</h4>
+                <div style="display:flex; gap:12px; margin-bottom:0.5rem; flex-wrap:wrap;">
+                    <label class="setting-toggle-row" style="display:flex;align-items:center;gap:8px;font-size:0.84rem;opacity:0.8;cursor:pointer;">
+                        <input type="checkbox" id="lock-shortcuts-toggle" style="width:14px;height:14px;cursor:pointer;">
+                        Lock shortcut order
+                    </label>
+                </div>
+                <div id="manage-list" class="manage-list"></div>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="setting-section">
+                <h4>Backup &amp; Restore</h4>
+                <p class="setting-hint" style="margin-bottom:0.9rem;">Export all your settings, shortcuts, notes, and data to a file — then restore them anytime.</p>
+                <div class="backup-restore-row">
+                    <button id="backup-export-btn" class="primary-btn" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Export Backup
+                    </button>
+                    <label id="backup-import-label" class="primary-btn" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;margin:0;">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        Import Backup
+                        <input type="file" id="backup-import-input" accept=".json" style="display:none;">
+                    </label>
+                </div>
+                <div id="backup-status" class="backup-status hidden"></div>
+            </div>
+
+            <hr class="modal-divider">
+
+            <div class="setting-section">
+                <h4>Advanced — Edit CSS</h4>
+                <p class="setting-hint" style="margin-top:0;">Export the current CSS, edit it in any text editor on your computer, then import it back!</p>
+
+                <div class="backup-restore-row">
+                    <button id="css-export-btn" class="primary-btn" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Export CSS
+                    </button>
+                    <label id="css-import-label" class="primary-btn" style="flex:1;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;margin:0;">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        Import CSS
+                        <input type="file" id="css-import-input" accept=".css,text/css" style="display:none;">
+                    </label>
+                </div>
+
+                <button id="reset-custom-css-btn" type="button" class="reset-danger-btn">Reset to Original</button>
+
+                <div id="custom-css-status" class="backup-status hidden"></div>
+                <p id="custom-css-active-label" class="setting-hint" style="margin-top:0.4rem;">Using the original stylesheet.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- =============================================
+         CUSTOM CONTEXT MENUS
+         ============================================= -->
+
+    <!-- Wallpaper Context Menu -->
+    <div id="ctx-wallpaper" class="ctx-menu" role="menu" aria-label="Wallpaper options">
+        <div class="ctx-menu-header">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span>Wallpaper</span>
+        </div>
+        <div class="ctx-divider"></div>
+        <button class="ctx-item" id="ctx-bg-settings">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </span>
+            <span class="ctx-label">Settings</span>
+            <span class="ctx-hint">Open setting panel</span>
+        </button>
+        <button class="ctx-item" id="ctx-bg-lock">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </span>
+            <span class="ctx-label" id="ctx-bg-lock-label">Lock Background</span>
+            <span class="ctx-hint" id="ctx-bg-lock-hint">Pause rotation</span>
+        </button>
+        <button class="ctx-item" id="ctx-bg-next">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+            </span>
+            <span class="ctx-label">Next Wallpaper</span>
+            <span class="ctx-hint">Fetch new background</span>
+        </button>
+        <button class="ctx-item" id="ctx-bg-download">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </span>
+            <span class="ctx-label">Download Wallpaper</span>
+            <span class="ctx-hint">Save current image</span>
+        </button>
+        <div class="ctx-divider"></div>
+        <button class="ctx-item" id="ctx-add-shortcut">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            </span>
+            <span class="ctx-label">Add New Shortcut</span>
+            <span class="ctx-hint">Quick add shortcut</span>
+        </button>
+    </div>
+
+    <!-- Shortcut Context Menu -->
+    <div id="ctx-shortcut" class="ctx-menu" role="menu" aria-label="Shortcut options">
+        <div class="ctx-menu-header">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span id="ctx-shortcut-name">Shortcut</span>
+        </div>
+        <div class="ctx-divider"></div>
+        <button class="ctx-item" id="ctx-sc-open-new-tab">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </span>
+            <span class="ctx-label">Open in New Tab</span>
+        </button>
+        <button class="ctx-item" id="ctx-sc-open-new-window">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+            </span>
+            <span class="ctx-label">Open in New Window</span>
+        </button>
+        <div class="ctx-divider"></div>
+        <button class="ctx-item" id="ctx-sc-edit">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </span>
+            <span class="ctx-label">Edit Shortcut</span>
+            <span class="ctx-hint">Change title & URL</span>
+        </button>
+        <button class="ctx-item" id="ctx-sc-favicon">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </span>
+            <span class="ctx-label">Change Icon</span>
+            <span class="ctx-hint">Custom favicon</span>
+        </button>
+        <button class="ctx-item" id="ctx-sc-refresh-favicon">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            </span>
+            <span class="ctx-label">Refresh Icon</span>
+            <span class="ctx-hint">Re-fetch from site</span>
+        </button>
+        <div class="ctx-divider"></div>
+        <button class="ctx-item ctx-item-danger" id="ctx-sc-delete">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            </span>
+            <span class="ctx-label">Delete Shortcut</span>
+            <span class="ctx-hint">Remove from page</span>
+        </button>
+    </div>
+
+    <!-- Most Visited Item Context Menu -->
+    <div id="ctx-mv" class="ctx-menu" role="menu" aria-label="Most visited site options">
+        <div class="ctx-menu-header">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            <span id="ctx-mv-name">Site</span>
+        </div>
+        <div class="ctx-divider"></div>
+        <button class="ctx-item" id="ctx-mv-open-new-tab">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </span>
+            <span class="ctx-label">Open in New Tab</span>
+        </button>
+        <button class="ctx-item" id="ctx-mv-open-new-window">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+            </span>
+            <span class="ctx-label">Open in New Window</span>
+        </button>
+        <button class="ctx-item" id="ctx-mv-copy-link">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+            </span>
+            <span class="ctx-label">Copy Link</span>
+        </button>
+        <div class="ctx-divider"></div>
+        <button class="ctx-item ctx-item-danger" id="ctx-mv-remove">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </span>
+            <span class="ctx-label">Remove from Most Visited</span>
+            <span class="ctx-hint">Hide this site</span>
+        </button>
+    </div>
+
+    <!-- Bookmark Item Context Menu -->
+    <div id="ctx-bm-item" class="ctx-menu" role="menu" aria-label="Bookmark options">
+        <div class="ctx-menu-header">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            <span id="ctx-bm-item-name">Bookmark</span>
+        </div>
+        <div class="ctx-divider"></div>
+        <button class="ctx-item" id="ctx-bm-open-new-tab">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </span>
+            <span class="ctx-label">Open in New Tab</span>
+        </button>
+        <button class="ctx-item" id="ctx-bm-open-new-window">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+            </span>
+            <span class="ctx-label">Open in New Window</span>
+        </button>
+        <button class="ctx-item" id="ctx-bm-edit">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </span>
+            <span class="ctx-label">Edit</span>
+            <span class="ctx-hint">Title & URL</span>
+        </button>
+        <button class="ctx-item" id="ctx-bm-copy-url">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            </span>
+            <span class="ctx-label">Copy URL</span>
+        </button>
+        <div class="ctx-divider"></div>
+        <button class="ctx-item ctx-item-danger" id="ctx-bm-delete">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            </span>
+            <span class="ctx-label">Delete</span>
+            <span class="ctx-hint">Remove bookmark</span>
+        </button>
+    </div>
+
+    <!-- Bookmark Folder Context Menu -->
+    <div id="ctx-bm-folder" class="ctx-menu" role="menu" aria-label="Folder options">
+        <div class="ctx-menu-header">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" opacity="0.85"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+            <span id="ctx-bm-folder-name">Folder</span>
+        </div>
+        <div class="ctx-divider"></div>
+        <button class="ctx-item" id="ctx-bmf-open">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+            <span class="ctx-label">Open Folder</span>
+        </button>
+        <button class="ctx-item" id="ctx-bmf-rename">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </span>
+            <span class="ctx-label">Rename</span>
+        </button>
+        <button class="ctx-item" id="ctx-bmf-new-bookmark">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            </span>
+            <span class="ctx-label">New Bookmark</span>
+            <span class="ctx-hint">Add inside folder</span>
+        </button>
+        <button class="ctx-item" id="ctx-bmf-new-folder">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+            </span>
+            <span class="ctx-label">New Folder</span>
+            <span class="ctx-hint">Add inside folder</span>
+        </button>
+        <div class="ctx-divider"></div>
+        <button class="ctx-item ctx-item-danger" id="ctx-bmf-delete">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            </span>
+            <span class="ctx-label">Delete Folder</span>
+            <span class="ctx-hint">Removes all contents</span>
+        </button>
+    </div>
+
+    <!-- Bookmarks Background Context Menu (empty area / list background) -->
+    <div id="ctx-bm-bg" class="ctx-menu" role="menu" aria-label="Bookmarks panel options">
+        <div class="ctx-menu-header">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+            <span>Bookmarks</span>
+        </div>
+        <div class="ctx-divider"></div>
+        <button class="ctx-item" id="ctx-bmbg-new-bookmark">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            </span>
+            <span class="ctx-label">New Bookmark</span>
+        </button>
+        <button class="ctx-item" id="ctx-bmbg-new-folder">
+            <span class="ctx-icon">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+            </span>
+            <span class="ctx-label">New Folder</span>
+        </button>
+    </div>
+
+    <!-- Add Bookmark / Folder Popup -->
+    <div id="ctx-bm-add-popup" class="ctx-popup-overlay ctx-popup-hidden">
+        <div class="ctx-popup ctx-popup-add">
+            <div class="ctx-popup-header">
+                <div class="ctx-popup-title-row">
+                    <div class="ctx-popup-icon-wrap">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                    </div>
+                    <span id="ctx-bm-add-title">Add Bookmark</span>
+                </div>
+                <button class="ctx-popup-close" id="ctx-bm-add-close">&times;</button>
+            </div>
+            <div class="ctx-popup-body">
+                <div class="ctx-favicon-tabs">
+                    <button class="ctx-favicon-tab active" data-bm-add-type="bookmark">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                        Bookmark
+                    </button>
+                    <button class="ctx-favicon-tab" data-bm-add-type="folder">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/></svg>
+                        Folder
+                    </button>
+                </div>
+                <div class="ctx-field-group">
+                    <label class="ctx-field-label" id="ctx-bm-add-name-label">Title</label>
+                    <input type="text" id="ctx-bm-add-name" class="ctx-field-input" placeholder="e.g. My Bookmark" autocomplete="off">
+                </div>
+                <div class="ctx-field-group" id="ctx-bm-add-url-group">
+                    <label class="ctx-field-label">URL</label>
+                    <input type="text" id="ctx-bm-add-url" class="ctx-field-input" placeholder="https://..." autocomplete="off">
+                </div>
+                <div class="ctx-hint" id="ctx-bm-add-location">Will be added to: Bookmarks</div>
+            </div>
+            <div class="ctx-popup-footer">
+                <button class="ctx-popup-btn ctx-popup-btn-ghost" id="ctx-bm-add-cancel">Cancel</button>
+                <button class="ctx-popup-btn ctx-popup-btn-primary" id="ctx-bm-add-save">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Add
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Bookmark / Rename Folder Popup -->
+    <div id="ctx-bm-edit-popup" class="ctx-popup-overlay ctx-popup-hidden">
+        <div class="ctx-popup ctx-popup-edit">
+            <div class="ctx-popup-header">
+                <div class="ctx-popup-title-row">
+                    <div class="ctx-popup-icon-wrap" id="ctx-bm-edit-icon-wrap">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                    </div>
+                    <span id="ctx-bm-edit-title">Edit Bookmark</span>
+                </div>
+                <button class="ctx-popup-close" id="ctx-bm-edit-close">&times;</button>
+            </div>
+            <div class="ctx-popup-body">
+                <div class="ctx-field-group">
+                    <label class="ctx-field-label" id="ctx-bm-edit-name-label">Title</label>
+                    <input type="text" id="ctx-bm-edit-name" class="ctx-field-input" placeholder="Title" autocomplete="off">
+                </div>
+                <div class="ctx-field-group" id="ctx-bm-edit-url-group">
+                    <label class="ctx-field-label">URL</label>
+                    <input type="text" id="ctx-bm-edit-url" class="ctx-field-input" placeholder="https://..." autocomplete="off">
+                </div>
+            </div>
+            <div class="ctx-popup-footer">
+                <button class="ctx-popup-btn ctx-popup-btn-ghost" id="ctx-bm-edit-cancel">Cancel</button>
+                <button class="ctx-popup-btn ctx-popup-btn-primary" id="ctx-bm-edit-save">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Shortcut Popup -->
+    <div id="ctx-add-shortcut-popup" class="ctx-popup-overlay ctx-popup-hidden">
+        <div class="ctx-popup ctx-popup-add">
+            <div class="ctx-popup-header">
+                <div class="ctx-popup-title-row">
+                    <div class="ctx-popup-icon-wrap">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                    </div>
+                    <span>Add New Shortcut</span>
+                </div>
+                <button class="ctx-popup-close" id="ctx-add-close">&times;</button>
+            </div>
+            <div class="ctx-popup-body">
+                <div class="ctx-field-group">
+                    <label class="ctx-field-label">Website Name</label>
+                    <input type="text" id="ctx-add-name" class="ctx-field-input" placeholder="e.g. YouTube" autocomplete="off" maxlength="40">
+                </div>
+                <div class="ctx-field-group">
+                    <label class="ctx-field-label">URL</label>
+                    <input type="text" id="ctx-add-url" class="ctx-field-input" placeholder="https://..." autocomplete="off">
+                </div>
+                <div id="ctx-add-preview" class="ctx-favicon-preview ctx-hidden">
+                    <img id="ctx-add-preview-img" src="" alt="">
+                    <span id="ctx-add-preview-name"></span>
+                </div>
+            </div>
+            <div class="ctx-popup-footer">
+                <button class="ctx-popup-btn ctx-popup-btn-ghost" id="ctx-add-cancel">Cancel</button>
+                <button class="ctx-popup-btn ctx-popup-btn-primary" id="ctx-add-save">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Add Shortcut
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Shortcut Popup -->
+    <div id="ctx-edit-popup" class="ctx-popup-overlay ctx-popup-hidden">
+        <div class="ctx-popup ctx-popup-edit">
+            <div class="ctx-popup-header">
+                <div class="ctx-popup-title-row">
+                    <div class="ctx-popup-icon-wrap">
+                        <img id="ctx-edit-header-favicon" src="" alt="" width="18" height="18" style="border-radius:3px;">
+                    </div>
+                    <span>Edit Shortcut</span>
+                </div>
+                <button class="ctx-popup-close" id="ctx-edit-close">&times;</button>
+            </div>
+            <div class="ctx-popup-body">
+                <div class="ctx-field-group">
+                    <label class="ctx-field-label">Title</label>
+                    <input type="text" id="ctx-edit-name" class="ctx-field-input" placeholder="Website Name" autocomplete="off" maxlength="40">
+                </div>
+                <div class="ctx-field-group">
+                    <label class="ctx-field-label">URL</label>
+                    <input type="text" id="ctx-edit-url" class="ctx-field-input" placeholder="https://..." autocomplete="off">
+                </div>
+                <div class="ctx-field-group">
+                    <label class="ctx-field-label">Icon</label>
+                    <div class="ctx-favicon-tabs">
+                        <button class="ctx-favicon-tab active" data-fav-tab="default">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                            Website
+                        </button>
+                        <button class="ctx-favicon-tab" data-fav-tab="url">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                            URL
+                        </button>
+                        <button class="ctx-favicon-tab" data-fav-tab="local">
+                            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            Upload
+                        </button>
+                    </div>
+                    <div id="ctx-fav-panel-default" class="ctx-fav-panel">
+                        <div class="ctx-favicon-preview">
+                            <img id="ctx-edit-favicon-preview" src="" alt="" width="40" height="40" style="border-radius:8px;">
+                            <span class="ctx-hint" style="margin-left:10px;">Auto-fetched from website</span>
+                        </div>
+                    </div>
+                    <div id="ctx-fav-panel-url" class="ctx-fav-panel ctx-hidden">
+                        <input type="text" id="ctx-edit-favicon-url" class="ctx-field-input" placeholder="https://example.com/icon.png" autocomplete="off">
+                        <button class="ctx-popup-btn ctx-popup-btn-ghost" id="ctx-favicon-url-preview-btn" style="margin-top:6px;width:100%;">Preview</button>
+                        <img id="ctx-favicon-url-preview-img" src="" alt="" width="36" height="36" style="border-radius:6px;margin-top:6px;display:none;">
+                    </div>
+                    <div id="ctx-fav-panel-local" class="ctx-fav-panel ctx-hidden">
+                        <label class="ctx-upload-label">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            <span>Choose Image File</span>
+                            <input type="file" id="ctx-edit-favicon-file" accept="image/*" style="display:none;">
+                        </label>
+                        <img id="ctx-favicon-local-preview-img" src="" alt="" width="36" height="36" style="border-radius:6px;margin-top:6px;display:none;">
+                    </div>
+                </div>
+            </div>
+            <div class="ctx-popup-footer">
+                <button class="ctx-popup-btn ctx-popup-btn-ghost" id="ctx-edit-cancel">Cancel</button>
+                <button class="ctx-popup-btn ctx-popup-btn-primary" id="ctx-edit-save">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
