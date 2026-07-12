@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "My Glassmorphism Start Page",
+  "version": "18",
+  "description": "A beautiful minimalist new tab page with weather and shortcuts.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "glassmorphism-startpage@yourdomain.local",
+      "data_collection_permissions": {
+        "required": [
+          "locationInfo"
+        ]
+      }
+    }
+  },
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "type": "module"
+  },
+  "permissions": [
+    "storage",
+	"unlimitedStorage",
+    "geolocation",
+    "search",
+    "bookmarks",
+    "history",
+    "tabs",
+    "topSites"
+  ],
+  "host_permissions": [
+    "https://thequoteshub.com/*",
+    "https://pixabay.com/*",
+	"https://*.pixabay.com/*",
+    "https://api.open-meteo.com/*",
+	"https://geocoding-api.open-meteo.com/*",
+    "https://picsum.photos/*"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
